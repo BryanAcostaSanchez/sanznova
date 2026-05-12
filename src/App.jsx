@@ -96,46 +96,44 @@ function dlAll() {
 async function dlBusinessCardDarkPNG() {
   const bc = `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="1050" height="600" viewBox="0 0 1050 600" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1050" height="600" fill="#1E1E1E"/>
-  <rect x="50" y="50" width="950" height="500" fill="#0A0A0A" rx="24"/>
-  <g transform="translate(70, 140) scale(0.3)">
-    <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="74" y="38" width="90" height="13" rx="3.5" fill="#FFFFFF"/>
-      <rect x="74" y="38" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
-      <rect x="113" y="100" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
-      <rect x="36" y="149" width="90" height="13" rx="3.5" fill="#FFFFFF"/>
-      <circle cx="100" cy="100" r="3" stroke="#FFFFFF" stroke-width="1.5" fill="none" opacity="0.25"/>
-      <circle cx="160.5" cy="44.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
-      <circle cx="39.5" cy="155.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
-    </svg>
+  <rect width="1050" height="600" fill="#141414" rx="32"/>
+  <!-- Isotipo top-left -->
+  <g transform="translate(60, 60) scale(0.65)">
+    <rect x="74" y="38" width="90" height="13" rx="3.5" fill="#FFFFFF"/>
+    <rect x="74" y="38" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
+    <rect x="113" y="100" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
+    <rect x="36" y="149" width="90" height="13" rx="3.5" fill="#FFFFFF"/>
+    <circle cx="100" cy="100" r="3" stroke="#FFFFFF" stroke-width="1.5" fill="none" opacity="0.25"/>
+    <circle cx="160.5" cy="44.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
+    <circle cx="39.5" cy="155.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
   </g>
-  <text x="300" y="180" font-family="Arial, sans-serif" font-size="48" font-weight="600" fill="#FFFFFF">Bryan Sanz</text>
-  <text x="300" y="240" font-family="monospace" font-size="24" fill="#8A8A8A">FOUNDER & CEO</text>
-  <text x="300" y="320" font-family="Arial, sans-serif" font-size="28" fill="#8A8A8A">b@sanznova.com</text>
-  <text x="300" y="380" font-family="Arial, sans-serif" font-size="28" fill="#8A8A8A">+52 55 0000 0000</text>
+  <!-- Texto bottom-left -->
+  <text x="64" y="380" font-family="Arial, sans-serif" font-size="36" font-weight="600" fill="#FFFFFF">Bryan Sanz</text>
+  <text x="64" y="418" font-family="monospace" font-size="17" fill="#6B6B6B" letter-spacing="3">FOUNDER &amp; CEO</text>
+  <text x="64" y="466" font-family="Arial, sans-serif" font-size="20" fill="#525252">b@sanznova.com</text>
+  <text x="64" y="500" font-family="Arial, sans-serif" font-size="20" fill="#525252">+52 55 6453 2868</text>
 </svg>`;
   dl("sanznova-business-card-dark.svg", bc);
 }
 
 async function dlEmailSignaturePNG() {
   const sig = `<?xml version="1.0" encoding="UTF-8"?>
-<svg width="650" height="150" viewBox="0 0 650 150" xmlns="http://www.w3.org/2000/svg">
-  <rect width="650" height="150" fill="#0A0A0A"/>
-  <g transform="translate(10, 10) scale(0.06)">
-    <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="74" y="38" width="90" height="13" rx="3.5" fill="#FFFFFF"/>
-      <rect x="74" y="38" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
-      <rect x="113" y="100" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
-      <rect x="36" y="149" width="90" height="13" rx="3.5" fill="#FFFFFF"/>
-      <circle cx="100" cy="100" r="3" stroke="#FFFFFF" stroke-width="1.5" fill="none" opacity="0.25"/>
-      <circle cx="160.5" cy="44.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
-      <circle cx="39.5" cy="155.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
-    </svg>
+<svg width="650" height="170" viewBox="0 0 650 170" xmlns="http://www.w3.org/2000/svg">
+  <rect width="650" height="170" fill="#0A0A0A"/>
+  <g transform="translate(20, 35) scale(0.5)">
+    <rect x="74" y="38" width="90" height="13" rx="3.5" fill="#FFFFFF"/>
+    <rect x="74" y="38" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
+    <rect x="113" y="100" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
+    <rect x="36" y="149" width="90" height="13" rx="3.5" fill="#FFFFFF"/>
+    <circle cx="100" cy="100" r="3" stroke="#FFFFFF" stroke-width="1.5" fill="none" opacity="0.25"/>
+    <circle cx="160.5" cy="44.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
+    <circle cx="39.5" cy="155.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
   </g>
-  <line x1="140" y1="10" x2="140" y2="140" stroke="#1E1E1E" stroke-width="1"/>
-  <text x="160" y="45" font-family="Arial, sans-serif" font-size="18" font-weight="600" fill="#FFFFFF">Bryan Sanz</text>
-  <text x="160" y="70" font-family="Arial, sans-serif" font-size="14" fill="#8A8A8A">Founder & CEO — Sanznova</text>
-  <text x="160" y="100" font-family="monospace" font-size="13" fill="#8A8A8A">b@sanznova.com · sanznova.com</text>
+  <line x1="140" y1="20" x2="140" y2="150" stroke="#2A2A2A" stroke-width="1"/>
+  <text x="162" y="52" font-family="Arial, sans-serif" font-size="18" font-weight="600" fill="#FFFFFF">Bryan Sanz</text>
+  <text x="162" y="76" font-family="Arial, sans-serif" font-size="13" fill="#6B6B6B">Founder &amp; CEO — Sanznova</text>
+  <text x="162" y="108" font-family="monospace" font-size="12" fill="#525252">b@sanznova.com · sanznova.com</text>
+  <text x="162" y="130" font-family="monospace" font-size="12" fill="#525252">+52 55 6453 2868</text>
 </svg>`;
   dl("sanznova-email-signature.svg", sig);
 }
@@ -387,9 +385,9 @@ export default function Brandbook() {
 
       {/* 03 — LOGO SYSTEM */}
       <Sec bg={C.off} id="s3">
-        <Label>03 — Sistema de logotipo</Label>
-        <Title>El símbolo del sistema.</Title>
-        <Body>Dos brackets geométricos interlazados forman una "S" estructural — la inicial de Sanznova oculta en la geometría de un sistema. El nodo central hueco marca el punto de inflexión; los terminales representan puntos de entrada y salida del flujo.</Body>
+        <Label>03 — Logotipo</Label>
+        <Title>El símbolo de la marca.</Title>
+        <Body>Dos brackets geométricos interlazados forman una "S" — la inicial de Sanznova oculta en la geometría del código. Tres nodos marcan entrada, inflexión y salida. Una forma que no se dibuja: se construye.</Body>
 
         {(() => {
           const size = useWindowSize();
@@ -408,32 +406,31 @@ export default function Brandbook() {
         {/* Logo Origin Story */}
         <div style={{ marginBottom: 48, padding: size.isMobile ? "24px 20px" : "40px 36px", background: C.white, borderRadius: 16, border: `1px solid ${C.g100}` }}>
           <div style={{ fontFamily: F.mono, fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: C.g400, marginBottom: 20 }}>Origen del isotipo</div>
-          <div style={{ fontFamily: F.serif, fontSize: 26, fontStyle: "italic", color: C.black, lineHeight: 1.35, marginBottom: 20 }}>"La S que no se dibuja, se construye."</div>
           <div style={{ display: "grid", gridTemplateColumns: size.isMobile ? "1fr" : "1fr 1fr", gap: size.isMobile ? 16 : 32 }}>
             <div>
               <p style={{ fontFamily: F.sans, fontSize: 13, color: C.g500, lineHeight: 1.75, fontWeight: 300, margin: "0 0 16px" }}>
-                El isotipo de Sanznova nace de una idea simple: las mejores infraestructuras son invisibles. Nadie ve los cimientos de un edificio, pero sin ellos nada se sostiene.
+                El isotipo nace de los brackets — el símbolo más fundamental en programación para definir estructura. Un bracket abre, otro cierra. Juntos, contienen la lógica.
               </p>
               <p style={{ fontFamily: F.sans, fontSize: 13, color: C.g500, lineHeight: 1.75, fontWeight: 300, margin: 0 }}>
-                La marca toma su forma de dos brackets — el símbolo más fundamental en programación para definir estructura. Un bracket abre, otro cierra. Juntos, contienen la lógica. En nuestro caso, dos brackets se entrelazan en direcciones opuestas para formar una "S", la inicial de Sanznova, sin que ninguna línea curve: todo recto, todo preciso, todo construido.
+                Dos brackets opuestos se entrelazan para trazar una "S", la inicial de Sanznova, sin ninguna curva: todo recto, todo preciso. La forma no se inventa — emerge de la geometría del código.
               </p>
             </div>
             <div>
               <p style={{ fontFamily: F.sans, fontSize: 13, color: C.g500, lineHeight: 1.75, fontWeight: 300, margin: "0 0 16px" }}>
-                Los tres nodos cuentan la historia del flujo: el terminal superior es el punto de entrada — donde llega el problema del cliente. El anillo central hueco es el punto de inflexión — donde el sistema transforma. El terminal inferior es la salida — el resultado operando en automático.
+                Los tres nodos narran el flujo: el terminal superior es la entrada del problema. El anillo central — deliberadamente hueco — es el punto donde ocurre la transformación. El terminal inferior es el resultado en automático.
               </p>
               <p style={{ fontFamily: F.sans, fontSize: 13, color: C.g500, lineHeight: 1.75, fontWeight: 300, margin: 0 }}>
-                El nodo central es deliberadamente hueco. No es un punto sólido ni un adorno: es un espacio. Representa que lo que construimos no es el centro de atención — lo que importa es lo que fluye a través de él. La infraestructura bien hecha desaparece.
+                El nodo central es hueco porque la mejor infraestructura no llama la atención sobre sí misma. Lo que importa es lo que fluye a través de ella.
               </p>
             </div>
           </div>
-          <div style={{ display: "flex", gap: 24, marginTop: 24, paddingTop: 20, borderTop: `1px solid ${C.g100}` }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: size.isMobile ? 12 : 24, marginTop: 24, paddingTop: 20, borderTop: `1px solid ${C.g100}` }}>
             {[
               { l: "Referencia formal", v: "Brackets de código { }" },
               { l: "Principio", v: "Estructura > Decoración" },
               { l: "Lectura oculta", v: "La S de Sanznova" },
             ].map(r => (
-              <div key={r.l} style={{ flex: 1 }}>
+              <div key={r.l} style={{ flex: "1 1 120px" }}>
                 <div style={{ fontFamily: F.mono, fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: C.g400, marginBottom: 4 }}>{r.l}</div>
                 <div style={{ fontFamily: F.sans, fontSize: 13, color: C.black, fontWeight: 500 }}>{r.v}</div>
               </div>
@@ -569,7 +566,7 @@ export default function Brandbook() {
       {/* 06 — TYPOGRAPHY */}
       <Sec bg={C.white} id="s6">
         <Label>06 — Tipografía</Label>
-        <Title>Tres voces, un sistema.</Title>
+        <Title>Tres registros, una voz.</Title>
         <div style={{ display: "grid", gridTemplateColumns: size.isMobile ? "1fr" : "1fr 1fr 1fr", gap: size.isMobile ? 16 : 32, marginBottom: 48 }}>
           {[
             { name: "Instrument Serif", role: "Display", family: F.serif, size: 56, weight: 400, style: "italic", desc: "Títulos hero, statements. Siempre itálica." },
@@ -620,7 +617,7 @@ export default function Brandbook() {
       <Sec bg={C.off} id="s7">
         <Label>07 — Iconografía</Label>
         <Title>Línea, no relleno.</Title>
-        <Body>El sistema iconográfico usa trazos de 1.5px con terminaciones redondeadas. Los íconos operan a 24×24px y se escalan proporcionalmente. Sin rellenos sólidos, sin decoración.</Body>
+        <Body>Trazos de 1.5px con terminaciones redondeadas. Los íconos operan a 24×24px y se escalan proporcionalmente. Sin rellenos sólidos, sin decoración.</Body>
         {(() => {
           const size = useWindowSize();
           const cols = size.isMobile ? 2 : 4;
@@ -781,13 +778,13 @@ export default function Brandbook() {
         <Label>11 — Papelería corporativa</Label>
         <Title>Sistema de identidad<br/>corporativa.</Title>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 24 }}>
-          <div style={{ background: C.charcoal, borderRadius: 14, padding: 40, display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: 220, aspectRatio: "3.5/2" }}>
+          <div style={{ background: C.charcoal, borderRadius: 14, padding: "32px 36px", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: 220, aspectRatio: "3.5/2" }}>
             <Logo size={48} variant="light" wordmark={false} />
             <div>
               <div style={{ fontFamily: F.sans, fontSize: 15, fontWeight: 500, color: C.white }}>Bryan Sanz</div>
               <div style={{ fontFamily: F.mono, fontSize: 9, color: C.g500, letterSpacing: "0.1em", marginTop: 3 }}>FOUNDER & CEO</div>
               <div style={{ fontFamily: F.sans, fontSize: 11, color: C.g500, marginTop: 10 }}>b@sanznova.com</div>
-              <div style={{ fontFamily: F.sans, fontSize: 11, color: C.g500, marginTop: 2 }}>+52 55 0000 0000</div>
+              <div style={{ fontFamily: F.sans, fontSize: 11, color: C.g500, marginTop: 2 }}>+52 55 6453 2868</div>
             </div>
           </div>
           <div style={{ background: C.white, borderRadius: 14, padding: 40, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", border: `1px solid ${C.g100}`, aspectRatio: "3.5/2" }}>
@@ -837,11 +834,12 @@ export default function Brandbook() {
             <div style={{ fontFamily: F.mono, fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: C.steel, marginBottom: 16 }}>Firma de correo</div>
             <div style={{ display: "flex", alignItems: "center", gap: 20, padding: "16px 0", borderTop: `1px solid ${C.charcoal}` }}>
               <Logo size={36} variant="light" wordmark={false} />
-              <div style={{ width: 1, height: 44, background: C.charcoal }} />
+              <div style={{ width: 1, height: 52, background: C.charcoal }} />
               <div>
                 <div style={{ fontFamily: F.sans, fontSize: 13, fontWeight: 500, color: C.white }}>Bryan Sanz</div>
                 <div style={{ fontFamily: F.sans, fontSize: 11, color: C.g500, marginTop: 2 }}>Founder & CEO — Sanznova</div>
                 <div style={{ fontFamily: F.mono, fontSize: 10, color: C.g500, marginTop: 6 }}>b@sanznova.com · sanznova.com</div>
+                <div style={{ fontFamily: F.mono, fontSize: 10, color: C.g500, marginTop: 3 }}>+52 55 6453 2868</div>
               </div>
             </div>
           </div>
@@ -917,16 +915,16 @@ export default function Brandbook() {
           <div style={{ fontFamily: F.sans, fontSize: 13, fontWeight: 600, color: C.black, marginBottom: 20 }}>Logos e Isotipos</div>
           <div style={{ display: "grid", gridTemplateColumns: size.isMobile ? "1fr 1fr" : "repeat(4, 1fr)", gap: 12 }}>
             {[
-              { name: "Logo Dark", file: "sanznova-logo-dark.svg", fn: () => dl("sanznova-logo-dark.svg", logoSVG("dark", true)), bg: C.white, border: C.black },
-              { name: "Logo Light", file: "sanznova-logo-light.svg", fn: () => dl("sanznova-logo-light.svg", logoSVG("light", true)), bg: C.black, border: C.white },
-              { name: "Isotipo Dark", file: "sanznova-isotipo-dark.svg", fn: () => dl("sanznova-isotipo-dark.svg", logoSVG("dark", false)), bg: C.white, border: C.black },
-              { name: "Isotipo Light", file: "sanznova-isotipo-light.svg", fn: () => dl("sanznova-isotipo-light.svg", logoSVG("light", false)), bg: C.black, border: C.white },
+              { name: "Logo Dark", svgFn: () => logoSVG("dark", true), dlFn: () => dl("sanznova-logo-dark.svg", logoSVG("dark", true)), bg: C.white },
+              { name: "Logo Light", svgFn: () => logoSVG("light", true), dlFn: () => dl("sanznova-logo-light.svg", logoSVG("light", true)), bg: C.black },
+              { name: "Isotipo Dark", svgFn: () => logoSVG("dark", false), dlFn: () => dl("sanznova-isotipo-dark.svg", logoSVG("dark", false)), bg: C.white },
+              { name: "Isotipo Light", svgFn: () => logoSVG("light", false), dlFn: () => dl("sanznova-isotipo-light.svg", logoSVG("light", false)), bg: C.black },
             ].map((item) => (
               <div
                 key={item.name}
-                onClick={item.fn}
+                onClick={item.dlFn}
                 style={{
-                  padding: size.isMobile ? "12px" : "20px 16px",
+                  padding: size.isMobile ? "12px" : "16px",
                   background: C.white,
                   border: `1px solid ${C.g100}`,
                   borderRadius: 10,
@@ -935,21 +933,22 @@ export default function Brandbook() {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  gap: 8,
+                  gap: 10,
+                  userSelect: "none",
                 }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = C.black;
-                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.08)";
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = C.g100;
-                  e.currentTarget.style.boxShadow = "none";
-                }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = C.black; e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.08)"; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = C.g100; e.currentTarget.style.boxShadow = "none"; }}
               >
-                <div style={{ width: "100%", height: 48, background: item.bg, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", padding: "4px" }} dangerouslySetInnerHTML={{ __html: logoSVG(item.bg === C.black ? "light" : "dark", false) }} />
-                <div style={{ textAlign: "center", width: "100%" }}>
+                <div style={{ width: "100%", background: item.bg, borderRadius: 6, padding: "16px 8px", display: "flex", alignItems: "center", justifyContent: "center", minHeight: 72 }}>
+                  <img
+                    src={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(item.svgFn())}`}
+                    alt={item.name}
+                    style={{ width: "100%", maxHeight: 56, objectFit: "contain", display: "block" }}
+                  />
+                </div>
+                <div style={{ textAlign: "center" }}>
                   <div style={{ fontFamily: F.sans, fontSize: size.isMobile ? 10 : 11, fontWeight: 500, color: C.black }}>↓ {item.name}</div>
-                  <div style={{ fontFamily: F.mono, fontSize: 8, color: C.g400 }}>SVG · Escalable</div>
+                  <div style={{ fontFamily: F.mono, fontSize: 8, color: C.g400, marginTop: 2 }}>SVG · Escalable</div>
                 </div>
               </div>
             ))}
@@ -971,7 +970,7 @@ export default function Brandbook() {
                 key={f.size}
                 onClick={() => dl(`sanznova-favicon-${f.px}.svg`, faviconSVG(f.px))}
                 style={{
-                  padding: size.isMobile ? "12px" : "20px 16px",
+                  padding: size.isMobile ? "12px" : "16px",
                   background: C.white,
                   border: `1px solid ${C.g100}`,
                   borderRadius: 10,
@@ -980,7 +979,8 @@ export default function Brandbook() {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  gap: 8,
+                  gap: 10,
+                  userSelect: "none",
                 }}
                 onMouseEnter={e => {
                   e.currentTarget.style.borderColor = C.black;
@@ -991,10 +991,16 @@ export default function Brandbook() {
                   e.currentTarget.style.boxShadow = "none";
                 }}
               >
-                <div style={{ width: Math.min(f.px, 48), height: Math.min(f.px, 48), background: C.black, borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center" }} dangerouslySetInnerHTML={{ __html: faviconSVG(Math.min(f.px, 48)) }} />
+                <div style={{ width: 56, height: 56, background: C.black, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <img
+                    src={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(`<svg width="56" height="56" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none"><rect x="74" y="38" width="90" height="13" rx="3.5" fill="#FFFFFF"/><rect x="74" y="38" width="13" height="62" rx="3.5" fill="#FFFFFF"/><rect x="113" y="100" width="13" height="62" rx="3.5" fill="#FFFFFF"/><rect x="36" y="149" width="90" height="13" rx="3.5" fill="#FFFFFF"/><circle cx="100" cy="100" r="3" stroke="#FFFFFF" stroke-width="1.5" fill="none" opacity="0.35"/></svg>`)}`}
+                    alt={f.size}
+                    style={{ width: 36, height: 36, objectFit: "contain" }}
+                  />
+                </div>
                 <div style={{ textAlign: "center", width: "100%" }}>
                   <div style={{ fontFamily: F.sans, fontSize: size.isMobile ? 9 : 11, fontWeight: 500, color: C.black }}>↓ {f.size}</div>
-                  <div style={{ fontFamily: F.mono, fontSize: 8, color: C.g400 }}>SVG</div>
+                  <div style={{ fontFamily: F.mono, fontSize: 8, color: C.g400, marginTop: 2 }}>SVG</div>
                 </div>
               </div>
             ))}
@@ -1043,7 +1049,7 @@ export default function Brandbook() {
 
         {/* ICONS */}
         <div style={{ marginBottom: 56 }}>
-          <div style={{ fontFamily: F.sans, fontSize: 13, fontWeight: 600, color: C.black, marginBottom: 20 }}>Sistema de Íconos (8 íconos)</div>
+          <div style={{ fontFamily: F.sans, fontSize: 13, fontWeight: 600, color: C.black, marginBottom: 20 }}>Íconos (8 íconos)</div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 20 }}>
             {ICONS.map((ic) => (
               <button
@@ -1122,7 +1128,7 @@ export default function Brandbook() {
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", minHeight: "70vh" }}>
           <Logo size={80} variant="light" wordmark={false} />
           <div style={{ fontFamily: F.serif, fontSize: "clamp(28px, 4vw, 44px)", fontStyle: "italic", color: C.white, marginTop: 48, marginBottom: 16, lineHeight: 1.25 }}>
-            La marca es el sistema.<br/>El sistema es la marca.
+            La marca es la base.<br/>La base hace posible todo lo demás.
           </div>
           <div style={{ fontFamily: F.sans, fontSize: 14, color: C.g500, fontWeight: 300, maxWidth: 440, lineHeight: 1.7, marginBottom: 48 }}>
             Este documento es la referencia definitiva para la aplicación de la identidad visual de Sanznova en todos los puntos de contacto.
