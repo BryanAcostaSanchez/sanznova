@@ -38,23 +38,16 @@ const F = {
   mono: "'JetBrains Mono', 'SF Mono', monospace",
 };
 
-/* ─── SVG GENERATORS ─── */
 function logoSVG(variant = "dark", wordmark = true) {
   const fg = variant === "dark" ? C.black : C.white;
   const fg2 = variant === "dark" ? C.g500 : "rgba(255,255,255,0.5)";
   const h = wordmark ? 320 : 200;
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<svg width="200" height="${h}" viewBox="0 0 200 ${h}" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect x="74" y="38" width="90" height="13" rx="3.5" fill="${fg}"/>
-  <rect x="74" y="38" width="13" height="62" rx="3.5" fill="${fg}"/>
-  <rect x="113" y="100" width="13" height="62" rx="3.5" fill="${fg}"/>
-  <rect x="36" y="149" width="90" height="13" rx="3.5" fill="${fg}"/>
-  <circle cx="100" cy="100" r="3" fill="none" stroke="${fg}" stroke-width="1.5" opacity="0.25"/>
-  <circle cx="160.5" cy="44.5" r="2.5" fill="${fg}" opacity="0.3"/>
-  <circle cx="39.5" cy="155.5" r="2.5" fill="${fg}" opacity="0.3"/>${wordmark ? `
-  <text x="100" y="240" text-anchor="middle" font-family="Plus Jakarta Sans, system-ui, sans-serif" font-size="27" font-weight="500" letter-spacing="0.18em" fill="${fg}">SANZNOVA</text>
-  <text x="100" y="264" text-anchor="middle" font-family="JetBrains Mono, SF Mono, monospace" font-size="8.5" font-weight="400" letter-spacing="0.25em" fill="${fg2}">SOFTWARE &amp; INFRASTRUCTURE</text>` : ""}
-</svg>`;
+  const w = wordmark ? 560 : 200;
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" fill="none"><rect width="${w}" height="${h}" fill="${variant === 'dark' ? C.white : C.black}"/><g><rect x="74" y="38" width="90" height="13" rx="3.5" fill="${fg}"/><rect x="74" y="38" width="13" height="62" rx="3.5" fill="${fg}"/><rect x="113" y="100" width="13" height="62" rx="3.5" fill="${fg}"/><rect x="36" y="149" width="90" height="13" rx="3.5" fill="${fg}"/><circle cx="100" cy="100" r="3" stroke="${fg}" stroke-width="1.5" fill="none" opacity="0.25"/><circle cx="160.5" cy="44.5" r="2.5" fill="${fg}" opacity="0.3"/><circle cx="39.5" cy="155.5" r="2.5" fill="${fg}" opacity="0.3"/></g>${wordmark ? `<g transform="translate(200, 120)"><text x="0" y="0" font-family="Plus Jakarta Sans, system-ui, sans-serif" font-size="48" font-weight="500" letter-spacing="0.18em" fill="${fg}">SANZNOVA</text><text x="0" y="24" font-family="JetBrains Mono, SF Mono, monospace" font-size="10" letter-spacing="0.25em" fill="${fg2}">SOFTWARE &amp; INFRASTRUCTURE</text></g>` : ''}</svg>`;
+}
+
+function faviconSVG(size = 64) {
+  return `<svg width="${size}" height="${size}" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none"><rect x="74" y="38" width="90" height="13" rx="3.5" fill="#0A0A0A"/><rect x="74" y="38" width="13" height="62" rx="3.5" fill="#0A0A0A"/><rect x="113" y="100" width="13" height="62" rx="3.5" fill="#0A0A0A"/><rect x="36" y="149" width="90" height="13" rx="3.5" fill="#0A0A0A"/><circle cx="100" cy="100" r="3" stroke="#0A0A0A" stroke-width="1.5" fill="none" opacity="0.25"/><circle cx="160.5" cy="44.5" r="2.5" fill="#0A0A0A" opacity="0.3"/><circle cx="39.5" cy="155.5" r="2.5" fill="#0A0A0A" opacity="0.3"/></svg>`;
 }
 
 function dl(name, content) {
@@ -922,23 +915,27 @@ export default function Brandbook() {
         {/* LOGOS & ISOTIPO */}
         <div style={{ marginBottom: 56 }}>
           <div style={{ fontFamily: F.sans, fontSize: 13, fontWeight: 600, color: C.black, marginBottom: 20 }}>Logos e Isotipos</div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
+          <div style={{ display: "grid", gridTemplateColumns: size.isMobile ? "1fr 1fr" : "repeat(4, 1fr)", gap: 12 }}>
             {[
-              { name: "Logo Dark", file: "sanznova-logo-dark.svg", fn: () => dl("sanznova-logo-dark.svg", logoSVG("dark", true)) },
-              { name: "Logo Light", file: "sanznova-logo-light.svg", fn: () => dl("sanznova-logo-light.svg", logoSVG("light", true)) },
-              { name: "Isotipo Dark", file: "sanznova-isotipo-dark.svg", fn: () => dl("sanznova-isotipo-dark.svg", logoSVG("dark", false)) },
-              { name: "Isotipo Light", file: "sanznova-isotipo-light.svg", fn: () => dl("sanznova-isotipo-light.svg", logoSVG("light", false)) },
+              { name: "Logo Dark", file: "sanznova-logo-dark.svg", fn: () => dl("sanznova-logo-dark.svg", logoSVG("dark", true)), bg: C.white, border: C.black },
+              { name: "Logo Light", file: "sanznova-logo-light.svg", fn: () => dl("sanznova-logo-light.svg", logoSVG("light", true)), bg: C.black, border: C.white },
+              { name: "Isotipo Dark", file: "sanznova-isotipo-dark.svg", fn: () => dl("sanznova-isotipo-dark.svg", logoSVG("dark", false)), bg: C.white, border: C.black },
+              { name: "Isotipo Light", file: "sanznova-isotipo-light.svg", fn: () => dl("sanznova-isotipo-light.svg", logoSVG("light", false)), bg: C.black, border: C.white },
             ].map((item) => (
               <div
                 key={item.name}
                 onClick={item.fn}
                 style={{
-                  padding: "20px 16px",
+                  padding: size.isMobile ? "12px" : "20px 16px",
                   background: C.white,
                   border: `1px solid ${C.g100}`,
                   borderRadius: 10,
                   cursor: "pointer",
                   transition: "all 0.2s",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 8,
                 }}
                 onMouseEnter={e => {
                   e.currentTarget.style.borderColor = C.black;
@@ -949,8 +946,11 @@ export default function Brandbook() {
                   e.currentTarget.style.boxShadow = "none";
                 }}
               >
-                <div style={{ fontFamily: F.sans, fontSize: 11, fontWeight: 500, color: C.black, marginBottom: 6 }}>↓ {item.name}</div>
-                <div style={{ fontFamily: F.mono, fontSize: 9, color: C.g400 }}>SVG · Escalable</div>
+                <div style={{ width: "100%", height: 48, background: item.bg, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", padding: "4px" }} dangerouslySetInnerHTML={{ __html: logoSVG(item.bg === C.black ? "light" : "dark", false) }} />
+                <div style={{ textAlign: "center", width: "100%" }}>
+                  <div style={{ fontFamily: F.sans, fontSize: size.isMobile ? 10 : 11, fontWeight: 500, color: C.black }}>↓ {item.name}</div>
+                  <div style={{ fontFamily: F.mono, fontSize: 8, color: C.g400 }}>SVG · Escalable</div>
+                </div>
               </div>
             ))}
           </div>
@@ -959,40 +959,28 @@ export default function Brandbook() {
         {/* FAVICONS */}
         <div style={{ marginBottom: 56 }}>
           <div style={{ fontFamily: F.sans, fontSize: 13, fontWeight: 600, color: C.black, marginBottom: 20 }}>Favicons & App Icons</div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 12 }}>
+          <div style={{ display: "grid", gridTemplateColumns: size.isMobile ? "repeat(3, 1fr)" : "repeat(5, 1fr)", gap: 12 }}>
             {[
               { size: "16×16", px: 16 },
               { size: "32×32", px: 32 },
               { size: "48×48", px: 48 },
               { size: "64×64", px: 64 },
               { size: "128×128", px: 128 },
-            ].map((item) => (
+            ].map((f) => (
               <div
-                key={item.size}
-                onClick={() => {
-                  const svg = `<svg width="${item.px}" height="${item.px}" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
-                    <rect x="74" y="38" width="90" height="13" rx="3.5" fill="#0A0A0A"/>
-                    <rect x="74" y="38" width="13" height="62" rx="3.5" fill="#0A0A0A"/>
-                    <rect x="113" y="100" width="13" height="62" rx="3.5" fill="#0A0A0A"/>
-                    <rect x="36" y="149" width="90" height="13" rx="3.5" fill="#0A0A0A"/>
-                    <circle cx="100" cy="100" r="3" stroke="#0A0A0A" stroke-width="1.5" fill="none" opacity="0.25"/>
-                    <circle cx="160.5" cy="44.5" r="2.5" fill="#0A0A0A" opacity="0.3"/>
-                    <circle cx="39.5" cy="155.5" r="2.5" fill="#0A0A0A" opacity="0.3"/>
-                  </svg>`;
-                  dl(`sanznova-favicon-${item.size.split("×")[0]}.svg`, svg);
-                }}
+                key={f.size}
+                onClick={() => dl(`sanznova-favicon-${f.px}.svg`, faviconSVG(f.px))}
                 style={{
-                  padding: "16px",
+                  padding: size.isMobile ? "12px" : "20px 16px",
                   background: C.white,
                   border: `1px solid ${C.g100}`,
                   borderRadius: 10,
                   cursor: "pointer",
+                  transition: "all 0.2s",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  justifyContent: "center",
                   gap: 8,
-                  transition: "all 0.2s",
                 }}
                 onMouseEnter={e => {
                   e.currentTarget.style.borderColor = C.black;
@@ -1003,8 +991,11 @@ export default function Brandbook() {
                   e.currentTarget.style.boxShadow = "none";
                 }}
               >
-                <div style={{ width: Math.min(item.px, 40), height: Math.min(item.px, 40), background: C.black, borderRadius: 6 }} />
-                <div style={{ fontFamily: F.sans, fontSize: 10, fontWeight: 500, color: C.black }}>↓ {item.size}</div>
+                <div style={{ width: Math.min(f.px, 48), height: Math.min(f.px, 48), background: C.black, borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center" }} dangerouslySetInnerHTML={{ __html: faviconSVG(Math.min(f.px, 48)) }} />
+                <div style={{ textAlign: "center", width: "100%" }}>
+                  <div style={{ fontFamily: F.sans, fontSize: size.isMobile ? 9 : 11, fontWeight: 500, color: C.black }}>↓ {f.size}</div>
+                  <div style={{ fontFamily: F.mono, fontSize: 8, color: C.g400 }}>SVG</div>
+                </div>
               </div>
             ))}
           </div>
@@ -1013,7 +1004,7 @@ export default function Brandbook() {
         {/* PRINT & STATIONERY */}
         <div style={{ marginBottom: 56 }}>
           <div style={{ fontFamily: F.sans, fontSize: 13, fontWeight: 600, color: C.black, marginBottom: 20 }}>Papelería Corporativa (Canva Ready)</div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: size.isMobile ? "1fr" : "repeat(3, 1fr)", gap: 16 }}>
             {[
               { title: "Business Card Dark", desc: "1050×600px (3.5×2 in)", fn: dlBusinessCardDarkPNG },
               { title: "Email Signature", desc: "650×150px (Canva)", fn: dlEmailSignaturePNG },
