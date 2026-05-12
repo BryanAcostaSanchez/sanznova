@@ -94,11 +94,12 @@ function dlAll() {
 // ─── CANVA-READY ASSET GENERATORS ───
 // Generate business card SVG
 async function dlBusinessCardDarkPNG() {
-  const bc = `<?xml version="1.0" encoding="UTF-8"?>
+  // Cara negra — logo centrado arriba, texto izquierda abajo
+  // Isotipo: 200x200 viewBox, scaled 0.7 = 140x140. Centrado en 1050: x offset = (1050 - 140) / 2 = 455. Top padding 50.
+  const dark = `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="1050" height="600" viewBox="0 0 1050 600" xmlns="http://www.w3.org/2000/svg">
   <rect width="1050" height="600" fill="#141414" rx="32"/>
-  <!-- Isotipo top-left -->
-  <g transform="translate(60, 60) scale(0.65)">
+  <g transform="translate(455, 50) scale(0.7)">
     <rect x="74" y="38" width="90" height="13" rx="3.5" fill="#FFFFFF"/>
     <rect x="74" y="38" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
     <rect x="113" y="100" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
@@ -107,13 +108,48 @@ async function dlBusinessCardDarkPNG() {
     <circle cx="160.5" cy="44.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
     <circle cx="39.5" cy="155.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
   </g>
-  <!-- Texto bottom-left -->
-  <text x="64" y="380" font-family="Arial, sans-serif" font-size="36" font-weight="600" fill="#FFFFFF">Bryan Sanz</text>
-  <text x="64" y="418" font-family="monospace" font-size="17" fill="#6B6B6B" letter-spacing="3">FOUNDER &amp; CEO</text>
-  <text x="64" y="466" font-family="Arial, sans-serif" font-size="20" fill="#525252">b@sanznova.com</text>
-  <text x="64" y="500" font-family="Arial, sans-serif" font-size="20" fill="#525252">+52 55 6453 2868</text>
+  <text x="64" y="390" font-family="Arial, sans-serif" font-size="36" font-weight="600" fill="#FFFFFF">Bryan Sanz</text>
+  <text x="64" y="426" font-family="monospace" font-size="17" fill="#6B6B6B" letter-spacing="3">FOUNDER &amp; CEO</text>
+  <text x="64" y="472" font-family="Arial, sans-serif" font-size="20" fill="#525252">b@sanznova.com</text>
+  <text x="64" y="506" font-family="Arial, sans-serif" font-size="20" fill="#525252">+52 55 6453 2868</text>
 </svg>`;
-  dl("sanznova-business-card-dark.svg", bc);
+
+  // Cara blanca — logo completo (isotipo + wordmark) centrado
+  const light = `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1050" height="600" viewBox="0 0 1050 600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1050" height="600" fill="#FAFAFA" rx="32"/>
+  <rect width="1050" height="600" fill="none" stroke="#E8E8E8" stroke-width="1" rx="32"/>
+  <!-- Isotipo centrado: 200x200 a scale 0.9 = 180x180. x=(1050-180)/2=435, y=140 -->
+  <g transform="translate(435, 140) scale(0.9)">
+    <rect x="74" y="38" width="90" height="13" rx="3.5" fill="#0A0A0A"/>
+    <rect x="74" y="38" width="13" height="62" rx="3.5" fill="#0A0A0A"/>
+    <rect x="113" y="100" width="13" height="62" rx="3.5" fill="#0A0A0A"/>
+    <rect x="36" y="149" width="90" height="13" rx="3.5" fill="#0A0A0A"/>
+    <circle cx="100" cy="100" r="3" stroke="#0A0A0A" stroke-width="1.5" fill="none" opacity="0.25"/>
+    <circle cx="160.5" cy="44.5" r="2.5" fill="#0A0A0A" opacity="0.3"/>
+    <circle cx="39.5" cy="155.5" r="2.5" fill="#0A0A0A" opacity="0.3"/>
+  </g>
+  <!-- Wordmark centrado debajo del isotipo -->
+  <text x="525" y="368" font-family="Arial, sans-serif" font-size="28" font-weight="500" fill="#0A0A0A" text-anchor="middle" letter-spacing="8">SANZNOVA</text>
+  <text x="525" y="396" font-family="monospace" font-size="11" fill="#8A8A8A" text-anchor="middle" letter-spacing="4">SOFTWARE &amp; INFRASTRUCTURE</text>
+</svg>`;
+
+  // Crear ambos links antes de disparar cualquiera
+  const files = [
+    { name: "sanznova-business-card-dark.svg", content: dark },
+    { name: "sanznova-business-card-light.svg", content: light },
+  ];
+  const links = files.map(f => {
+    const b = new Blob([f.content], { type: "image/svg+xml" });
+    const u = URL.createObjectURL(b);
+    const a = document.createElement("a");
+    a.href = u; a.download = f.name;
+    document.body.appendChild(a);
+    return { a, u };
+  });
+  links[0].a.click();
+  links[1].a.click();
+  links.forEach(({ a, u }) => { document.body.removeChild(a); URL.revokeObjectURL(u); });
 }
 
 async function dlEmailSignaturePNG() {
@@ -778,17 +814,21 @@ export default function Brandbook() {
         <Label>11 — Papelería corporativa</Label>
         <Title>Sistema de identidad<br/>corporativa.</Title>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 24 }}>
-          <div style={{ background: C.charcoal, borderRadius: 14, padding: "32px 36px", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: 220, aspectRatio: "3.5/2" }}>
-            <Logo size={48} variant="light" wordmark={false} />
-            <div>
+          {/* Cara negra */}
+          <div style={{ background: C.charcoal, borderRadius: 14, padding: "28px 32px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", minHeight: 220, aspectRatio: "3.5/2" }}>
+            <div style={{ display: "flex", justifyContent: "center", width: "100%", paddingTop: 4 }}>
+              <Logo size={48} variant="light" wordmark={false} />
+            </div>
+            <div style={{ width: "100%" }}>
               <div style={{ fontFamily: F.sans, fontSize: 15, fontWeight: 500, color: C.white }}>Bryan Sanz</div>
               <div style={{ fontFamily: F.mono, fontSize: 9, color: C.g500, letterSpacing: "0.1em", marginTop: 3 }}>FOUNDER & CEO</div>
               <div style={{ fontFamily: F.sans, fontSize: 11, color: C.g500, marginTop: 10 }}>b@sanznova.com</div>
               <div style={{ fontFamily: F.sans, fontSize: 11, color: C.g500, marginTop: 2 }}>+52 55 6453 2868</div>
             </div>
           </div>
+          {/* Cara blanca — logo completo centrado */}
           <div style={{ background: C.white, borderRadius: 14, padding: 40, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", border: `1px solid ${C.g100}`, aspectRatio: "3.5/2" }}>
-            <Logo size={80} variant="dark" />
+            <Logo size={80} variant="dark" wordmark={true} />
           </div>
           <div style={{ gridColumn: "1 / -1", background: C.white, borderRadius: 14, padding: "32px 40px", border: `1px solid ${C.g100}`, minHeight: 320 }}>
             <div style={{ fontFamily: F.mono, fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: C.g400, marginBottom: 24 }}>Hoja membretada — A4</div>
@@ -1012,7 +1052,7 @@ export default function Brandbook() {
           <div style={{ fontFamily: F.sans, fontSize: 13, fontWeight: 600, color: C.black, marginBottom: 20 }}>Papelería Corporativa (Canva Ready)</div>
           <div style={{ display: "grid", gridTemplateColumns: size.isMobile ? "1fr" : "repeat(3, 1fr)", gap: 16 }}>
             {[
-              { title: "Business Card Dark", desc: "1050×600px (3.5×2 in)", fn: dlBusinessCardDarkPNG },
+              { title: "Business Card (Dark + Light)", desc: "1050×600px · 2 archivos SVG", fn: dlBusinessCardDarkPNG },
               { title: "Email Signature", desc: "650×150px (Canva)", fn: dlEmailSignaturePNG },
               { title: "Social Avatar", desc: "1200×1200px", fn: dlSocialAvatar },
             ].map((item) => (
