@@ -1,5 +1,29 @@
 import { useState, useEffect } from "react";
 
+/* ─── RESPONSIVE HOOK ─── */
+function useWindowSize() {
+  const [size, setSize] = useState({ width: 0, height: 0, isMobile: false });
+  useEffect(() => {
+    function handleResize() {
+      const width = window.innerWidth;
+      setSize({ width, height: window.innerHeight, isMobile: width < 768 });
+    }
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  return size;
+}
+
+/* ─── RESPONSIVE UTILITIES ─── */
+const responsive = {
+  pad: (mobile, desktop) => (size) => size.isMobile ? mobile : desktop,
+  cols: (mobile, tablet, desktop) => (size) => size.isMobile ? mobile : size.width < 1024 ? tablet : desktop,
+  fontSize: (mobile, desktop) => `clamp(${mobile}px, 2vw, ${desktop}px)`,
+  gap: (mobile, desktop) => (size) => size.isMobile ? mobile : desktop,
+  gridCols: (mobile, desktop) => (size) => size.isMobile ? `repeat(${mobile}, 1fr)` : `repeat(${desktop}, 1fr)`,
+};
+
 /* ─── DESIGN TOKENS ─── */
 const C = {
   black: "#0A0A0A", dark: "#141414", charcoal: "#1E1E1E", graphite: "#2A2A2A",
@@ -75,131 +99,71 @@ function dlAll() {
 }
 
 // ─── CANVA-READY ASSET GENERATORS ───
-function svgToPNG(svgString, width, height, bgColor = "#FFFFFF") {
-  return new Promise((resolve) => {
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = bgColor;
-    ctx.fillRect(0, 0, width, height);
-    const img = new Image();
-    img.onload = () => {
-      ctx.drawImage(img, 0, 0, width, height);
-      resolve(canvas.toDataURL("image/png"));
-    };
-    img.src = "data:image/svg+xml;base64," + btoa(svgString);
-  });
-}
-
-function dlBusinessCardDark() {
+// Generate business card SVG
+async function dlBusinessCardDarkPNG() {
   const bc = `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="1050" height="600" viewBox="0 0 1050 600" xmlns="http://www.w3.org/2000/svg">
   <rect width="1050" height="600" fill="#1E1E1E"/>
   <rect x="50" y="50" width="950" height="500" fill="#0A0A0A" rx="24"/>
-  <g transform="translate(70, 70)">
-    ${logoSVG("light", false).match(/<svg[^>]*>([\s\S]*?)<\/svg>/)[1]}
+  <g transform="translate(70, 140) scale(0.3)">
+    <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="74" y="38" width="90" height="13" rx="3.5" fill="#FFFFFF"/>
+      <rect x="74" y="38" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
+      <rect x="113" y="100" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
+      <rect x="36" y="149" width="90" height="13" rx="3.5" fill="#FFFFFF"/>
+      <circle cx="100" cy="100" r="3" stroke="#FFFFFF" stroke-width="1.5" fill="none" opacity="0.25"/>
+      <circle cx="160.5" cy="44.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
+      <circle cx="39.5" cy="155.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
+    </svg>
   </g>
-  <text x="150" y="180" font-family="Plus Jakarta Sans, sans-serif" font-size="36" font-weight="600" fill="#FFFFFF">Bryan Sanz</text>
-  <text x="150" y="220" font-family="JetBrains Mono, monospace" font-size="20" fill="#8A8A8A" letter-spacing="1">FOUNDER & CEO</text>
-  <text x="150" y="280" font-family="Plus Jakarta Sans, sans-serif" font-size="28" fill="#8A8A8A">b@sanznova.com</text>
-  <text x="150" y="320" font-family="Plus Jakarta Sans, sans-serif" font-size="28" fill="#8A8A8A">+52 55 0000 0000</text>
+  <text x="300" y="180" font-family="Arial, sans-serif" font-size="48" font-weight="600" fill="#FFFFFF">Bryan Sanz</text>
+  <text x="300" y="240" font-family="monospace" font-size="24" fill="#8A8A8A">FOUNDER & CEO</text>
+  <text x="300" y="320" font-family="Arial, sans-serif" font-size="28" fill="#8A8A8A">b@sanznova.com</text>
+  <text x="300" y="380" font-family="Arial, sans-serif" font-size="28" fill="#8A8A8A">+52 55 0000 0000</text>
 </svg>`;
-  dl("sanznova-business-card-dark.png", bc);
-}
-
-async function dlBusinessCardDarkPNG() {
-  const bc = `<svg width="1050" height="600" viewBox="0 0 1050 600" xmlns="http://www.w3.org/2000/svg">
-    <rect width="1050" height="600" fill="#1E1E1E"/>
-    <rect x="50" y="50" width="950" height="500" fill="#0A0A0A" rx="24"/>
-    <g transform="translate(70, 180) scale(0.15)">
-      <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="74" y="38" width="90" height="13" rx="3.5" fill="#FFFFFF"/>
-        <rect x="74" y="38" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
-        <rect x="113" y="100" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
-        <rect x="36" y="149" width="90" height="13" rx="3.5" fill="#FFFFFF"/>
-        <circle cx="100" cy="100" r="3" stroke="#FFFFFF" stroke-width="1.5" fill="none" opacity="0.25"/>
-        <circle cx="160.5" cy="44.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
-        <circle cx="39.5" cy="155.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
-      </svg>
-    </g>
-    <text x="220" y="120" font-family="Arial, sans-serif" font-size="48" font-weight="600" fill="#FFFFFF">Bryan Sanz</text>
-    <text x="220" y="170" font-family="monospace" font-size="18" fill="#8A8A8A" letter-spacing="2">FOUNDER & CEO</text>
-    <text x="220" y="250" font-family="Arial, sans-serif" font-size="24" fill="#8A8A8A">b@sanznova.com</text>
-    <text x="220" y="300" font-family="Arial, sans-serif" font-size="24" fill="#8A8A8A">+52 55 0000 0000</text>
-  </svg>`;
-  const png = await svgToPNG(bc, 1050, 600, "#1E1E1E");
-  const b = new Blob([atob(png.split(",")[1])], { type: "image/png" });
-  const u = URL.createObjectURL(b);
-  const a = document.createElement("a");
-  a.href = u; a.download = "sanznova-business-card-dark-canva.png";
-  document.body.appendChild(a); a.click();
-  document.body.removeChild(a); URL.revokeObjectURL(u);
+  dl("sanznova-business-card-dark.svg", bc);
 }
 
 async function dlEmailSignaturePNG() {
-  const sig = `<svg width="650" height="150" viewBox="0 0 650 150" xmlns="http://www.w3.org/2000/svg">
-    <rect width="650" height="150" fill="#0A0A0A"/>
-    <g transform="translate(14, 14) scale(0.08)">
-      <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="74" y="38" width="90" height="13" rx="3.5" fill="#FFFFFF"/>
-        <rect x="74" y="38" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
-        <rect x="113" y="100" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
-        <rect x="36" y="149" width="90" height="13" rx="3.5" fill="#FFFFFF"/>
-        <circle cx="100" cy="100" r="3" stroke="#FFFFFF" stroke-width="1.5" fill="none" opacity="0.25"/>
-        <circle cx="160.5" cy="44.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
-        <circle cx="39.5" cy="155.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
-      </svg>
-    </g>
-    <line x1="135" y1="20" x2="135" y2="130" stroke="#1E1E1E" stroke-width="1"/>
-    <text x="150" y="45" font-family="Arial, sans-serif" font-size="16" font-weight="600" fill="#FFFFFF">Bryan Sanz</text>
-    <text x="150" y="65" font-family="Arial, sans-serif" font-size="13" fill="#8A8A8A">Founder & CEO — Sanznova</text>
-    <text x="150" y="90" font-family="monospace" font-size="12" fill="#8A8A8A">b@sanznova.com · sanznova.com</text>
-    <text x="150" y="115" font-family="Arial, sans-serif" font-size="12" fill="#6B6B6B">+52 55 0000 0000</text>
-  </svg>`;
-  const png = await svgToPNG(sig, 650, 150, "#0A0A0A");
-  const b = new Blob([atob(png.split(",")[1])], { type: "image/png" });
-  const u = URL.createObjectURL(b);
-  const a = document.createElement("a");
-  a.href = u; a.download = "sanznova-email-signature-canva.png";
-  document.body.appendChild(a); a.click();
-  document.body.removeChild(a); URL.revokeObjectURL(u);
+  const sig = `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="650" height="150" viewBox="0 0 650 150" xmlns="http://www.w3.org/2000/svg">
+  <rect width="650" height="150" fill="#0A0A0A"/>
+  <g transform="translate(10, 10) scale(0.06)">
+    <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="74" y="38" width="90" height="13" rx="3.5" fill="#FFFFFF"/>
+      <rect x="74" y="38" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
+      <rect x="113" y="100" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
+      <rect x="36" y="149" width="90" height="13" rx="3.5" fill="#FFFFFF"/>
+      <circle cx="100" cy="100" r="3" stroke="#FFFFFF" stroke-width="1.5" fill="none" opacity="0.25"/>
+      <circle cx="160.5" cy="44.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
+      <circle cx="39.5" cy="155.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
+    </svg>
+  </g>
+  <line x1="140" y1="10" x2="140" y2="140" stroke="#1E1E1E" stroke-width="1"/>
+  <text x="160" y="45" font-family="Arial, sans-serif" font-size="18" font-weight="600" fill="#FFFFFF">Bryan Sanz</text>
+  <text x="160" y="70" font-family="Arial, sans-serif" font-size="14" fill="#8A8A8A">Founder & CEO — Sanznova</text>
+  <text x="160" y="100" font-family="monospace" font-size="13" fill="#8A8A8A">b@sanznova.com · sanznova.com</text>
+</svg>`;
+  dl("sanznova-email-signature.svg", sig);
 }
 
 async function dlSocialAvatar() {
-  const avatar = `<svg width="1200" height="1200" viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg">
-    <rect width="1200" height="1200" fill="#0A0A0A"/>
-    <g transform="translate(300, 300)">
-      <svg width="600" height="600" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="74" y="38" width="90" height="13" rx="3.5" fill="#FFFFFF"/>
-        <rect x="74" y="38" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
-        <rect x="113" y="100" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
-        <rect x="36" y="149" width="90" height="13" rx="3.5" fill="#FFFFFF"/>
-        <circle cx="100" cy="100" r="3" stroke="#FFFFFF" stroke-width="1.5" fill="none" opacity="0.25"/>
-        <circle cx="160.5" cy="44.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
-        <circle cx="39.5" cy="155.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
-      </svg>
-    </g>
-  </svg>`;
-  const png = await svgToPNG(avatar, 1200, 1200, "#0A0A0A");
-  const b = new Blob([atob(png.split(",")[1])], { type: "image/png" });
-  const u = URL.createObjectURL(b);
-  const a = document.createElement("a");
-  a.href = u; a.download = "sanznova-avatar-social-1200x1200.png";
-  document.body.appendChild(a); a.click();
-  document.body.removeChild(a); URL.revokeObjectURL(u);
-}
-
-async function dlAllCanvaAssets() {
-  const assets = [
-    { name: "1. Business Card Dark", fn: dlBusinessCardDarkPNG },
-    { name: "2. Email Signature", fn: dlEmailSignaturePNG },
-    { name: "3. Social Avatar", fn: dlSocialAvatar },
-  ];
-  for (const asset of assets) {
-    await asset.fn();
-    await new Promise(r => setTimeout(r, 500));
-  }
+  const avatar = `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="1200" viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="1200" fill="#0A0A0A"/>
+  <g transform="translate(300, 300) scale(3)">
+    <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="74" y="38" width="90" height="13" rx="3.5" fill="#FFFFFF"/>
+      <rect x="74" y="38" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
+      <rect x="113" y="100" width="13" height="62" rx="3.5" fill="#FFFFFF"/>
+      <rect x="36" y="149" width="90" height="13" rx="3.5" fill="#FFFFFF"/>
+      <circle cx="100" cy="100" r="3" stroke="#FFFFFF" stroke-width="1.5" fill="none" opacity="0.25"/>
+      <circle cx="160.5" cy="44.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
+      <circle cx="39.5" cy="155.5" r="2.5" fill="#FFFFFF" opacity="0.3"/>
+    </svg>
+  </g>
+</svg>`;
+  dl("sanznova-avatar-social-1200x1200.svg", avatar);
 }
 
 /* ─── SHARED COMPONENTS ─── */
@@ -228,30 +192,50 @@ function Logo({ size = 200, wordmark = true, variant = "dark" }) {
 }
 
 function Sec({ children, bg = C.white, id }) {
+  const size = useWindowSize();
+  const padding = size.isMobile ? "40px 16px" : "80px 64px";
+  const marginTop = size.isMobile ? 40 : 80;
   return (
-    <section id={id} style={{ minHeight: "100vh", backgroundColor: bg, display: "flex", flexDirection: "column", justifyContent: "center", padding: "80px 64px", boxSizing: "border-box" }}>
+    <section id={id} style={{ minHeight: "100vh", backgroundColor: bg, display: "flex", flexDirection: "column", justifyContent: "center", padding, boxSizing: "border-box", marginTop, width: "100%" }}>
       {children}
     </section>
   );
 }
 
 function Label({ children, color = C.g400 }) {
-  return <div style={{ fontFamily: F.mono, fontSize: 11, fontWeight: 500, letterSpacing: "0.2em", textTransform: "uppercase", color, marginBottom: 40 }}>{children}</div>;
+  const size = useWindowSize();
+  return <div style={{ fontFamily: F.mono, fontSize: size.isMobile ? 9 : 11, fontWeight: 500, letterSpacing: "0.2em", textTransform: "uppercase", color, marginBottom: size.isMobile ? 24 : 40 }}>{children}</div>;
 }
 
 function Title({ children, color = C.black }) {
-  return <h2 style={{ fontFamily: F.serif, fontSize: "clamp(30px, 4.5vw, 48px)", fontWeight: 400, fontStyle: "italic", color, margin: "0 0 20px", lineHeight: 1.15 }}>{children}</h2>;
+  const size = useWindowSize();
+  return <h2 style={{ fontFamily: F.serif, fontSize: size.isMobile ? "clamp(24px, 6vw, 32px)" : "clamp(30px, 4.5vw, 48px)", fontWeight: 400, fontStyle: "italic", color, margin: "0 0 20px", lineHeight: 1.15 }}>{children}</h2>;
 }
 
 function Body({ children, mw = 560 }) {
-  return <p style={{ fontFamily: F.sans, fontSize: 15, lineHeight: 1.75, color: C.g500, fontWeight: 300, maxWidth: mw, margin: "0 0 40px" }}>{children}</p>;
+  const size = useWindowSize();
+  return <p style={{ fontFamily: F.sans, fontSize: size.isMobile ? 14 : 15, lineHeight: 1.75, color: C.g500, fontWeight: 300, maxWidth: mw, margin: "0 0 40px" }}>{children}</p>;
+}
+
+function ResponsiveGrid({ children, cols = { mobile: 1, tablet: 2, desktop: 2 }, gap = { mobile: 8, desktop: 20 } }) {
+  const size = useWindowSize();
+  const numCols = size.isMobile ? cols.mobile : size.width < 1024 ? cols.tablet : cols.desktop;
+  const gapVal = size.isMobile ? gap.mobile : gap.desktop;
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: `repeat(${numCols}, 1fr)`, gap: gapVal, boxSizing: "border-box", width: "100%" }}>
+      {children}
+    </div>
+  );
 }
 
 function DlBtn({ label, onClick }) {
+  const size = useWindowSize();
   const [ok, setOk] = useState(false);
+  const padding = size.isMobile ? "10px 14px" : "7px 12px";
+  const fontSize = size.isMobile ? 11 : 10;
   return (
     <button onClick={() => { onClick(); setOk(true); setTimeout(() => setOk(false), 1500); }}
-      style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 12px", background: ok ? C.charcoal : "transparent", border: `1px solid ${ok ? C.charcoal : C.g200}`, borderRadius: 6, fontFamily: F.mono, fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase", color: ok ? C.white : C.g500, cursor: "pointer", transition: "all 0.2s" }}>
+      style={{ display: "inline-flex", alignItems: "center", gap: 6, padding, background: ok ? C.charcoal : "transparent", border: `1px solid ${ok ? C.charcoal : C.g200}`, borderRadius: 6, fontFamily: F.mono, fontSize, letterSpacing: "0.08em", textTransform: "uppercase", color: ok ? C.white : C.g500, cursor: "pointer", transition: "all 0.2s", minHeight: size.isMobile ? 44 : "auto" }}>
       <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M8 1v10m0 0L4 7.5m4 3.5l4-3.5M2 13h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
       {ok ? "✓" : label}
     </button>
@@ -272,6 +256,9 @@ function Swatch({ hex, name, label }) {
 
 /* ─── MAIN ─── */
 export default function Brandbook() {
+  const size = useWindowSize();
+  const [menuOpen, setMenuOpen] = useState(false);
+
   useEffect(() => {
     const l = document.createElement("link");
     l.href = "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap";
@@ -280,29 +267,59 @@ export default function Brandbook() {
 
   const nav = [
     "Portada","Esencia","Valores","Logo","Uso incorrecto","Color",
-    "Tipografía","Iconografía","Layout","Fotografía","Voz","Papelería","Digital","Motion","Cierre"
+    "Tipografía","Iconografía","Layout","Fotografía","Voz","Papelería","Digital","Motion","Assets","Cierre"
   ];
 
+  const navClick = (i) => {
+    setMenuOpen(false);
+    document.getElementById(`s${i}`)?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <div style={{ fontFamily: F.sans, background: C.white, color: C.black }}>
+    <div style={{ fontFamily: F.sans, background: C.white, color: C.black, minHeight: "100vh", overflowX: "hidden" }}>
 
       {/* NAV */}
-      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, display: "flex", justifyContent: "center", gap: 20, padding: "14px 16px", background: "rgba(255,255,255,0.88)", backdropFilter: "blur(20px)", borderBottom: `1px solid ${C.g100}`, flexWrap: "wrap" }}>
-        {nav.map((t, i) => (
-          <a key={t} href={`#s${i}`} onClick={e => { e.preventDefault(); document.getElementById(`s${i}`)?.scrollIntoView({ behavior: "smooth" }); }}
-            style={{ fontFamily: F.mono, fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase", color: C.g400, textDecoration: "none", cursor: "pointer", transition: "color 0.2s" }}
+      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, display: "flex", justifyContent: size.isMobile ? "space-between" : "center", alignItems: "center", gap: size.isMobile ? 0 : 12, padding: size.isMobile ? "12px 12px" : "12px 20px", background: "rgba(255,255,255,0.95)", backdropFilter: "blur(20px)", borderBottom: `1px solid ${C.g100}`, flexWrap: "nowrap", overflow: "hidden", boxSizing: "border-box" }}>
+        {!size.isMobile && nav.map((t, i) => (
+          <a key={t} href={`#s${i}`} onClick={e => { e.preventDefault(); navClick(i); }}
+            style={{ fontFamily: F.mono, fontSize: 8, letterSpacing: "0.08em", textTransform: "uppercase", color: C.g400, textDecoration: "none", cursor: "pointer", transition: "color 0.2s", whiteSpace: "nowrap", flex: "0 0 auto", padding: "4px 6px" }}
             onMouseEnter={e => e.target.style.color = C.black} onMouseLeave={e => e.target.style.color = C.g400}>
             {t}
           </a>
         ))}
+        
+        {size.isMobile && (
+          <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: "none", border: "none", cursor: "pointer", padding: "8px 8px", minWidth: 44, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center", marginLeft: "auto" }}>
+            <div style={{ width: 20, height: 14, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+              <div style={{ width: "100%", height: 2, background: C.black, borderRadius: 1 }} />
+              <div style={{ width: "100%", height: 2, background: C.black, borderRadius: 1 }} />
+              <div style={{ width: "100%", height: 2, background: C.black, borderRadius: 1 }} />
+            </div>
+          </button>
+        )}
       </nav>
 
+      {/* MOBILE MENU */}
+      {size.isMobile && menuOpen && (
+        <div style={{ position: "fixed", top: 50, left: 0, right: 0, bottom: 0, zIndex: 99, background: C.white, borderBottom: `1px solid ${C.g100}`, overflowY: "auto", overflowX: "hidden" }}>
+          {nav.map((t, i) => (
+            <a key={t} href={`#s${i}`} onClick={e => { e.preventDefault(); navClick(i); }}
+              style={{ display: "block", padding: "12px 16px", fontFamily: F.mono, fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase", color: C.g400, textDecoration: "none", cursor: "pointer", borderBottom: `1px solid ${C.g100}` }}
+              onMouseEnter={e => e.target.style.color = C.black} onMouseLeave={e => e.target.style.color = C.g400}>
+              {t}
+            </a>
+          ))}
+        </div>
+      )}
+
+      {/* CONTENT */}
+      <div style={{ paddingTop: 50, minHeight: "100vh" }}>
       {/* 00 — COVER */}
       <Sec bg={C.black} id="s0">
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", minHeight: "80vh" }}>
           <div style={{ fontFamily: F.mono, fontSize: 11, letterSpacing: "0.3em", color: C.g500, marginBottom: 64, textTransform: "uppercase" }}>Brand Guidelines — 2026</div>
           <Logo size={140} variant="light" />
-          <div style={{ marginTop: 80, display: "flex", gap: 48 }}>
+        <div style={{ marginTop: size.isMobile ? 40 : 80, display: "flex", gap: size.isMobile ? 24 : 48, flexWrap: "wrap", justifyContent: "center" }}>
             {["Identidad", "Sistema", "Aplicación"].map(t => (
               <div key={t} style={{ fontFamily: F.mono, fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase", color: C.steel }}>{t}</div>
             ))}
@@ -315,7 +332,7 @@ export default function Brandbook() {
         <Label>01 — Esencia de marca</Label>
         <Title>Pensamiento sistémico,<br/>ejecución precisa.</Title>
         <Body>Sanznova es una firma tecnológica especializada en construir sistemas, automatización e infraestructura digital para empresas modernas. No vendemos código — diseñamos la arquitectura operativa que permite a las empresas escalar con inteligencia.</Body>
-        <div style={{ display: "flex", gap: 48, marginBottom: 48 }}>
+        <div style={{ display: "flex", gap: size.isMobile ? 20 : 48, marginBottom: 48, flexWrap: "wrap", justifyContent: size.isMobile ? "space-around" : "flex-start" }}>
           {[
             { n: "$20K", l: "Proyecto mínimo", s: "MXN" },
             { n: "$100K+", l: "Proyectos enterprise", s: "MXN" },
@@ -333,7 +350,7 @@ export default function Brandbook() {
             { t: "Automatización", d: "Flujos inteligentes que eliminan trabajo manual y reducen error." },
             { t: "Infraestructura", d: "Bases técnicas sólidas que sostienen el crecimiento real." },
           ].map(p => (
-            <div key={p.t} style={{ padding: "24px 20px", border: `1px solid ${C.g200}`, borderRadius: 12, background: C.white }}>
+            <div key={p.t} style={{ padding: size.isMobile ? "16px 12px" : "24px 20px", border: `1px solid ${C.g200}`, borderRadius: 12, background: C.white }}>
               <div style={{ fontFamily: F.sans, fontSize: 14, fontWeight: 600, color: C.black, marginBottom: 6 }}>{p.t}</div>
               <div style={{ fontFamily: F.sans, fontSize: 13, color: C.g500, lineHeight: 1.6, fontWeight: 300 }}>{p.d}</div>
             </div>
@@ -345,24 +362,34 @@ export default function Brandbook() {
       <Sec bg={C.white} id="s2">
         <Label>02 — Valores de marca</Label>
         <Title>Los principios que<br/>guían cada decisión.</Title>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 20, maxWidth: 800, marginTop: 8 }}>
-          {[
-            { icon: "◆", t: "Claridad sobre complejidad", d: "Reducimos lo complejo a lo esencial. Si no se puede explicar en una oración, no está listo." },
-            { icon: "◇", t: "Sistemas sobre soluciones", d: "No resolvemos problemas individuales. Construimos estructuras que previenen categorías enteras de problemas." },
-            { icon: "▪", t: "Precisión sobre velocidad", d: "Preferimos entregar una arquitectura correcta en 6 semanas que un parche en 2. La deuda técnica es deuda real." },
-            { icon: "□", t: "Transparencia radical", d: "El cliente ve lo que construimos, cómo lo construimos y por qué lo construimos así. Sin cajas negras." },
-          ].map(v => (
-            <div key={v.t} style={{ padding: "32px 28px", background: C.off, borderRadius: 14, border: `1px solid ${C.g100}` }}>
-              <div style={{ fontFamily: F.mono, fontSize: 20, color: C.black, marginBottom: 16, opacity: 0.6 }}>{v.icon}</div>
-              <div style={{ fontFamily: F.sans, fontSize: 15, fontWeight: 600, color: C.black, marginBottom: 8 }}>{v.t}</div>
-              <div style={{ fontFamily: F.sans, fontSize: 13, color: C.g500, lineHeight: 1.65, fontWeight: 300 }}>{v.d}</div>
+        {(() => {
+          const size = useWindowSize();
+          return (
+            <div style={{ display: "grid", gridTemplateColumns: size.isMobile ? "1fr" : "repeat(2, 1fr)", gap: size.isMobile ? 16 : 20, maxWidth: 800, marginTop: 8 }}>
+              {[
+                { icon: "◆", t: "Claridad sobre complejidad", d: "Reducimos lo complejo a lo esencial. Si no se puede explicar en una oración, no está listo." },
+                { icon: "◇", t: "Sistemas sobre soluciones", d: "No resolvemos problemas individuales. Construimos estructuras que previenen categorías enteras de problemas." },
+                { icon: "▪", t: "Precisión sobre velocidad", d: "Preferimos entregar una arquitectura correcta en 6 semanas que un parche en 2. La deuda técnica es deuda real." },
+                { icon: "□", t: "Transparencia radical", d: "El cliente ve lo que construimos, cómo lo construimos y por qué lo construimos así. Sin cajas negras." },
+              ].map(v => (
+                <div key={v.t} style={{ padding: size.isMobile ? "20px 16px" : "32px 28px", background: C.off, borderRadius: 14, border: `1px solid ${C.g100}` }}>
+                  <div style={{ fontFamily: F.mono, fontSize: size.isMobile ? 16 : 20, color: C.black, marginBottom: 16, opacity: 0.6 }}>{v.icon}</div>
+                  <div style={{ fontFamily: F.sans, fontSize: size.isMobile ? 13 : 15, fontWeight: 600, color: C.black, marginBottom: 8 }}>{v.t}</div>
+                  <div style={{ fontFamily: F.sans, fontSize: size.isMobile ? 12 : 13, color: C.g500, lineHeight: 1.65, fontWeight: 300 }}>{v.d}</div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <div style={{ marginTop: 40, padding: "28px 32px", background: C.black, borderRadius: 14, maxWidth: 800 }}>
-          <div style={{ fontFamily: F.mono, fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase", color: C.steel, marginBottom: 12 }}>Mantra interno</div>
-          <div style={{ fontFamily: F.serif, fontSize: 28, fontStyle: "italic", color: C.white, lineHeight: 1.35 }}>"Si no escala, no existe."</div>
-        </div>
+          );
+        })()}
+        {(() => {
+          const size = useWindowSize();
+          return (
+            <div style={{ marginTop: 40, padding: size.isMobile ? "20px 16px" : "28px 32px", background: C.black, borderRadius: 14, maxWidth: 800 }}>
+              <div style={{ fontFamily: F.mono, fontSize: size.isMobile ? 8 : 10, letterSpacing: "0.15em", textTransform: "uppercase", color: C.steel, marginBottom: 12 }}>Mantra interno</div>
+              <div style={{ fontFamily: F.serif, fontSize: size.isMobile ? 20 : 28, fontStyle: "italic", color: C.white, lineHeight: 1.35 }}>"Si no escala, no existe."</div>
+            </div>
+          );
+        })()}
       </Sec>
 
       {/* 03 — LOGO SYSTEM */}
@@ -371,20 +398,25 @@ export default function Brandbook() {
         <Title>El símbolo del sistema.</Title>
         <Body>Dos brackets geométricos interlazados forman una "S" estructural — la inicial de Sanznova oculta en la geometría de un sistema. El nodo central hueco marca el punto de inflexión; los terminales representan puntos de entrada y salida del flujo.</Body>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 48 }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: 56, background: C.white, borderRadius: 16, border: `1px solid ${C.g100}` }}>
-            <Logo size={180} variant="dark" />
-          </div>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: 56, background: C.black, borderRadius: 16 }}>
-            <Logo size={180} variant="light" />
-          </div>
-        </div>
+        {(() => {
+          const size = useWindowSize();
+          return (
+            <div style={{ display: "grid", gridTemplateColumns: size.isMobile ? "1fr" : "1fr 1fr", gap: size.isMobile ? 16 : 24, marginBottom: 48 }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: size.isMobile ? 24 : 56, background: C.white, borderRadius: 16, border: `1px solid ${C.g100}` }}>
+                <Logo size={size.isMobile ? 100 : 180} variant="dark" />
+              </div>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: size.isMobile ? 24 : 56, background: C.black, borderRadius: 16 }}>
+                <Logo size={size.isMobile ? 100 : 180} variant="light" />
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Logo Origin Story */}
-        <div style={{ marginBottom: 48, padding: "40px 36px", background: C.white, borderRadius: 16, border: `1px solid ${C.g100}` }}>
+        <div style={{ marginBottom: 48, padding: size.isMobile ? "24px 20px" : "40px 36px", background: C.white, borderRadius: 16, border: `1px solid ${C.g100}` }}>
           <div style={{ fontFamily: F.mono, fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: C.g400, marginBottom: 20 }}>Origen del isotipo</div>
           <div style={{ fontFamily: F.serif, fontSize: 26, fontStyle: "italic", color: C.black, lineHeight: 1.35, marginBottom: 20 }}>"La S que no se dibuja, se construye."</div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32 }}>
+          <div style={{ display: "grid", gridTemplateColumns: size.isMobile ? "1fr" : "1fr 1fr", gap: size.isMobile ? 16 : 32 }}>
             <div>
               <p style={{ fontFamily: F.sans, fontSize: 13, color: C.g500, lineHeight: 1.75, fontWeight: 300, margin: "0 0 16px" }}>
                 El isotipo de Sanznova nace de una idea simple: las mejores infraestructuras son invisibles. Nadie ve los cimientos de un edificio, pero sin ellos nada se sostiene.
@@ -545,7 +577,7 @@ export default function Brandbook() {
       <Sec bg={C.white} id="s6">
         <Label>06 — Tipografía</Label>
         <Title>Tres voces, un sistema.</Title>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 32, marginBottom: 48 }}>
+        <div style={{ display: "grid", gridTemplateColumns: size.isMobile ? "1fr" : "1fr 1fr 1fr", gap: size.isMobile ? 16 : 32, marginBottom: 48 }}>
           {[
             { name: "Instrument Serif", role: "Display", family: F.serif, size: 56, weight: 400, style: "italic", desc: "Títulos hero, statements. Siempre itálica." },
             { name: "Plus Jakarta Sans", role: "Body", family: F.sans, size: 56, weight: 300, style: "normal", desc: "Interfaces, cuerpo, navegación. Pesos 300–600." },
@@ -596,34 +628,50 @@ export default function Brandbook() {
         <Label>07 — Iconografía</Label>
         <Title>Línea, no relleno.</Title>
         <Body>El sistema iconográfico usa trazos de 1.5px con terminaciones redondeadas. Los íconos operan a 24×24px y se escalan proporcionalmente. Sin rellenos sólidos, sin decoración.</Body>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, maxWidth: 700, marginBottom: 24 }}>
-          {ICONS.map(ic => (
-            <div key={ic.name} onClick={() => dl(`sanznova-icon-${ic.name}.svg`, iconSVG(ic.paths))}
-              style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "20px 12px 14px", background: C.white, borderRadius: 10, border: `1px solid ${C.g100}`, cursor: "pointer", gap: 8, transition: "border-color 0.2s" }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = C.black}
-              onMouseLeave={e => e.currentTarget.style.borderColor = C.g100}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={C.black} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{ __html: ic.paths }} />
-              <div style={{ fontFamily: F.mono, fontSize: 9, color: C.g400, letterSpacing: "0.05em" }}>{ic.name}</div>
+        {(() => {
+          const size = useWindowSize();
+          const cols = size.isMobile ? 2 : 4;
+          return (
+            <div style={{ display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: 12, maxWidth: 700, marginBottom: 24 }}>
+              {ICONS.map(ic => (
+                <div key={ic.name} onClick={() => dl(`sanznova-icon-${ic.name}.svg`, iconSVG(ic.paths))}
+                  style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "20px 12px 14px", background: C.white, borderRadius: 10, border: `1px solid ${C.g100}`, cursor: "pointer", gap: 8, transition: "border-color 0.2s" }}
+                  onMouseEnter={e => e.currentTarget.style.borderColor = C.black}
+                  onMouseLeave={e => e.currentTarget.style.borderColor = C.g100}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={C.black} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{ __html: ic.paths }} />
+                  <div style={{ fontFamily: F.mono, fontSize: 9, color: C.g400, letterSpacing: "0.05em" }}>{ic.name}</div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <div style={{ display: "flex", gap: 12, maxWidth: 700, marginBottom: 40 }}>
-          <DlBtn label="Descargar todos los assets" onClick={dlAll} />
-          <DlBtn label="Íconos Dark" onClick={() => ICONS.forEach((ic, i) => setTimeout(() => dl(`sanznova-icon-${ic.name}.svg`, iconSVG(ic.paths)), i * 150))} />
-          <DlBtn label="Íconos Light" onClick={() => ICONS.forEach((ic, i) => setTimeout(() => dl(`sanznova-icon-${ic.name}-light.svg`, iconSVG(ic.paths, "#FFFFFF")), i * 150))} />
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, maxWidth: 700 }}>
-          {[
-            { t: "Trazo", d: "1.5px, round cap, round join" },
-            { t: "Grid", d: "24×24px con 2px de padding" },
-            { t: "Color", d: "Obsidian sobre light · Snow sobre dark" },
-          ].map(spec => (
-            <div key={spec.t} style={{ padding: "16px 20px", background: C.white, borderRadius: 10, border: `1px solid ${C.g100}` }}>
-              <div style={{ fontFamily: F.sans, fontSize: 13, fontWeight: 600, color: C.black, marginBottom: 4 }}>{spec.t}</div>
-              <div style={{ fontFamily: F.mono, fontSize: 11, color: C.g500 }}>{spec.d}</div>
+          );
+        })()}
+        {(() => {
+          const size = useWindowSize();
+          return (
+            <div style={{ display: "flex", flexDirection: size.isMobile ? "column" : "row", gap: 12, maxWidth: 700, marginBottom: 40 }}>
+              <DlBtn label="Descargar todos los assets" onClick={dlAll} />
+              <DlBtn label="Íconos Dark" onClick={() => ICONS.forEach((ic, i) => setTimeout(() => dl(`sanznova-icon-${ic.name}.svg`, iconSVG(ic.paths)), i * 150))} />
+              <DlBtn label="Íconos Light" onClick={() => ICONS.forEach((ic, i) => setTimeout(() => dl(`sanznova-icon-${ic.name}-light.svg`, iconSVG(ic.paths, "#FFFFFF")), i * 150))} />
             </div>
-          ))}
-        </div>
+          );
+        })()}
+        {(() => {
+          const size = useWindowSize();
+          return (
+            <div style={{ display: "grid", gridTemplateColumns: size.isMobile ? "1fr" : "repeat(3, 1fr)", gap: size.isMobile ? 12 : 16, maxWidth: 700 }}>
+              {[
+                { t: "Trazo", d: "1.5px, round cap, round join" },
+                { t: "Grid", d: "24×24px con 2px de padding" },
+                { t: "Color", d: "Obsidian sobre light · Snow sobre dark" },
+              ].map(spec => (
+                <div key={spec.t} style={{ padding: size.isMobile ? "12px 16px" : "16px 20px", background: C.white, borderRadius: 10, border: `1px solid ${C.g100}` }}>
+                  <div style={{ fontFamily: F.sans, fontSize: size.isMobile ? 12 : 13, fontWeight: 600, color: C.black, marginBottom: 4 }}>{spec.t}</div>
+                  <div style={{ fontFamily: F.mono, fontSize: 11, color: C.g500 }}>{spec.d}</div>
+                </div>
+              ))}
+            </div>
+          );
+        })()}
       </Sec>
 
       {/* 08 — LAYOUT & GRID */}
@@ -683,7 +731,7 @@ export default function Brandbook() {
             { t: "Prohibido", d: "Stock genérico, handshakes, personas señalando pantallas, gráficas falsas." },
             { t: "Formato", d: "WebP para web, TIFF para print. Mínimo 300dpi para impresión." },
           ].map(p => (
-            <div key={p.t} style={{ padding: "24px 20px", background: C.dark, borderRadius: 12, border: `1px solid ${C.charcoal}` }}>
+            <div key={p.t} style={{ padding: size.isMobile ? "16px 12px" : "24px 20px", background: C.dark, borderRadius: 12, border: `1px solid ${C.charcoal}` }}>
               <div style={{ fontFamily: F.sans, fontSize: 13, fontWeight: 600, color: C.white, marginBottom: 6 }}>{p.t}</div>
               <div style={{ fontFamily: F.sans, fontSize: 12, color: C.g500, lineHeight: 1.55, fontWeight: 300 }}>{p.d}</div>
             </div>
@@ -865,8 +913,221 @@ export default function Brandbook() {
         </div>
       </Sec>
 
-      {/* 14 — CLOSING */}
-      <Sec bg={C.black} id="s14">
+      {/* 14 — ASSET DOWNLOADS */}
+      <Sec bg={C.off} id="s14">
+        <Label>CENTRO DE DESCARGAS</Label>
+        <Title>Todos los assets, listos para usar.</Title>
+        <Body>Descarga todos los elementos del brandbook en formatos editoriales. Los archivos PNG están optimizados para Canva. Los SVGs son perfectos para diseñadores.</Body>
+
+        {/* LOGOS & ISOTIPO */}
+        <div style={{ marginBottom: 56 }}>
+          <div style={{ fontFamily: F.sans, fontSize: 13, fontWeight: 600, color: C.black, marginBottom: 20 }}>Logos e Isotipos</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
+            {[
+              { name: "Logo Dark", file: "sanznova-logo-dark.svg", fn: () => dl("sanznova-logo-dark.svg", logoSVG("dark", true)) },
+              { name: "Logo Light", file: "sanznova-logo-light.svg", fn: () => dl("sanznova-logo-light.svg", logoSVG("light", true)) },
+              { name: "Isotipo Dark", file: "sanznova-isotipo-dark.svg", fn: () => dl("sanznova-isotipo-dark.svg", logoSVG("dark", false)) },
+              { name: "Isotipo Light", file: "sanznova-isotipo-light.svg", fn: () => dl("sanznova-isotipo-light.svg", logoSVG("light", false)) },
+            ].map((item) => (
+              <div
+                key={item.name}
+                onClick={item.fn}
+                style={{
+                  padding: "20px 16px",
+                  background: C.white,
+                  border: `1px solid ${C.g100}`,
+                  borderRadius: 10,
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = C.black;
+                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.08)";
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = C.g100;
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              >
+                <div style={{ fontFamily: F.sans, fontSize: 11, fontWeight: 500, color: C.black, marginBottom: 6 }}>↓ {item.name}</div>
+                <div style={{ fontFamily: F.mono, fontSize: 9, color: C.g400 }}>SVG · Escalable</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* FAVICONS */}
+        <div style={{ marginBottom: 56 }}>
+          <div style={{ fontFamily: F.sans, fontSize: 13, fontWeight: 600, color: C.black, marginBottom: 20 }}>Favicons & App Icons</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 12 }}>
+            {[
+              { size: "16×16", px: 16 },
+              { size: "32×32", px: 32 },
+              { size: "48×48", px: 48 },
+              { size: "64×64", px: 64 },
+              { size: "128×128", px: 128 },
+            ].map((item) => (
+              <div
+                key={item.size}
+                onClick={() => {
+                  const svg = `<svg width="${item.px}" height="${item.px}" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
+                    <rect x="74" y="38" width="90" height="13" rx="3.5" fill="#0A0A0A"/>
+                    <rect x="74" y="38" width="13" height="62" rx="3.5" fill="#0A0A0A"/>
+                    <rect x="113" y="100" width="13" height="62" rx="3.5" fill="#0A0A0A"/>
+                    <rect x="36" y="149" width="90" height="13" rx="3.5" fill="#0A0A0A"/>
+                    <circle cx="100" cy="100" r="3" stroke="#0A0A0A" stroke-width="1.5" fill="none" opacity="0.25"/>
+                    <circle cx="160.5" cy="44.5" r="2.5" fill="#0A0A0A" opacity="0.3"/>
+                    <circle cx="39.5" cy="155.5" r="2.5" fill="#0A0A0A" opacity="0.3"/>
+                  </svg>`;
+                  dl(`sanznova-favicon-${item.size.split("×")[0]}.svg`, svg);
+                }}
+                style={{
+                  padding: "16px",
+                  background: C.white,
+                  border: `1px solid ${C.g100}`,
+                  borderRadius: 10,
+                  cursor: "pointer",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 8,
+                  transition: "all 0.2s",
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = C.black;
+                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.08)";
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = C.g100;
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              >
+                <div style={{ width: Math.min(item.px, 40), height: Math.min(item.px, 40), background: C.black, borderRadius: 6 }} />
+                <div style={{ fontFamily: F.sans, fontSize: 10, fontWeight: 500, color: C.black }}>↓ {item.size}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* PRINT & STATIONERY */}
+        <div style={{ marginBottom: 56 }}>
+          <div style={{ fontFamily: F.sans, fontSize: 13, fontWeight: 600, color: C.black, marginBottom: 20 }}>Papelería Corporativa (Canva Ready)</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+            {[
+              { title: "Business Card Dark", desc: "1050×600px (3.5×2 in)", fn: dlBusinessCardDarkPNG },
+              { title: "Email Signature", desc: "650×150px (Canva)", fn: dlEmailSignaturePNG },
+              { title: "Social Avatar", desc: "1200×1200px", fn: dlSocialAvatar },
+            ].map((item) => (
+              <button
+                key={item.title}
+                onClick={() => item.fn()}
+                style={{
+                  padding: size.isMobile ? "16px 12px" : "24px 20px",
+                  background: C.white,
+                  border: `1px solid ${C.g100}`,
+                  borderRadius: 10,
+                  cursor: "pointer",
+                  textAlign: "left",
+                  transition: "all 0.2s",
+                  fontFamily: F.sans,
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = C.black;
+                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.08)";
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = C.g100;
+                  e.currentTarget.style.boxShadow = "none";
+                  e.currentTarget.style.transform = "none";
+                }}
+              >
+                <div style={{ fontFamily: F.sans, fontSize: 12, fontWeight: 600, color: C.black, marginBottom: 6 }}>↓ {item.title}</div>
+                <div style={{ fontFamily: F.mono, fontSize: 9, color: C.g400 }}>{item.desc}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* ICONS */}
+        <div style={{ marginBottom: 56 }}>
+          <div style={{ fontFamily: F.sans, fontSize: 13, fontWeight: 600, color: C.black, marginBottom: 20 }}>Sistema de Íconos (8 íconos)</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 20 }}>
+            {ICONS.map((ic) => (
+              <button
+                key={ic.name}
+                onClick={() => dl(`sanznova-icon-${ic.name}.svg`, iconSVG(ic.paths))}
+                style={{
+                  padding: "16px 12px",
+                  background: C.white,
+                  border: `1px solid ${C.g100}`,
+                  borderRadius: 10,
+                  cursor: "pointer",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 8,
+                  transition: "all 0.2s",
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = C.black;
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = C.g100;
+                }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={C.black} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{ __html: ic.paths }} />
+                <div style={{ fontFamily: F.mono, fontSize: 8, color: C.g400 }}>↓ {ic.name}</div>
+              </button>
+            ))}
+          </div>
+          <DlBtn label="Descargar todos los íconos (Dark)" onClick={() => ICONS.forEach((ic, i) => setTimeout(() => dl(`sanznova-icon-${ic.name}.svg`, iconSVG(ic.paths)), i * 150))} />
+        </div>
+
+        {/* COLOR PALETTE */}
+        <div>
+          <div style={{ fontFamily: F.sans, fontSize: 13, fontWeight: 600, color: C.black, marginBottom: 20 }}>Paleta de Color</div>
+          {(() => {
+            const size = useWindowSize();
+            const cols = size.isMobile ? 2 : 5;
+            return (
+              <div style={{ display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: 12 }}>
+                {[
+                  { name: "Obsidian", hex: "#0A0A0A", color: C.black },
+                  { name: "Carbon", hex: "#141414", color: C.dark },
+                  { name: "Snow", hex: "#FFFFFF", color: C.white },
+                  { name: "Signal Blue", hex: "#0066FF", color: C.accent },
+                  { name: "System Green", hex: "#22C55E", color: C.success },
+                ].map((col) => (
+                  <div
+                    key={col.name}
+                    onClick={() => {
+                      navigator.clipboard.writeText(col.hex);
+                      alert("Color copiado: " + col.hex);
+                    }}
+                    style={{
+                      padding: "12px",
+                      background: C.off,
+                      border: `1px solid ${C.g100}`,
+                      borderRadius: 10,
+                      cursor: "pointer",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div style={{ width: "100%", height: 48, background: col.color, borderRadius: 6, marginBottom: 8, border: col.color === C.white ? `1px solid ${C.g100}` : "none" }} />
+                    <div style={{ fontFamily: F.sans, fontSize: 10, fontWeight: 500, color: C.black, marginBottom: 2 }}>{col.name}</div>
+                    <div style={{ fontFamily: F.mono, fontSize: 8, color: C.g400 }}>{col.hex}</div>
+                  </div>
+                ))}
+              </div>
+            );
+          })()}
+        </div>
+      </Sec>
+
+      {/* 15 — CLOSING */}
+      <Sec bg={C.black} id="s15">
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", minHeight: "70vh" }}>
           <Logo size={80} variant="light" wordmark={false} />
           <div style={{ fontFamily: F.serif, fontSize: "clamp(28px, 4vw, 44px)", fontStyle: "italic", color: C.white, marginTop: 48, marginBottom: 16, lineHeight: 1.25 }}>
@@ -875,7 +1136,7 @@ export default function Brandbook() {
           <div style={{ fontFamily: F.sans, fontSize: 14, color: C.g500, fontWeight: 300, maxWidth: 440, lineHeight: 1.7, marginBottom: 48 }}>
             Este documento es la referencia definitiva para la aplicación de la identidad visual de Sanznova en todos los puntos de contacto.
           </div>
-          <div style={{ display: "flex", gap: 32 }}>
+          <div style={{ display: "flex", gap: size.isMobile ? 16 : 32, flexWrap: "wrap", justifyContent: size.isMobile ? "center" : "flex-start" }}>
             {[
               { l: "Contacto", v: "b@sanznova.com" },
               { l: "Web", v: "sanznova.com" },
@@ -890,10 +1151,12 @@ export default function Brandbook() {
         </div>
       </Sec>
 
+      </div>
+
       {/* FOOTER */}
-      <div style={{ padding: "32px 64px", background: C.black, borderTop: `1px solid ${C.charcoal}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div style={{ fontFamily: F.mono, fontSize: 9, color: C.steel, letterSpacing: "0.1em" }}>© 2026 SANZNOVA. TODOS LOS DERECHOS RESERVADOS.</div>
-        <div style={{ fontFamily: F.mono, fontSize: 9, color: C.steel, letterSpacing: "0.1em" }}>DOCUMENTO CONFIDENCIAL — USO INTERNO</div>
+      <div style={{ padding: size.isMobile ? "20px 16px" : "32px 64px", background: C.black, borderTop: `1px solid ${C.charcoal}`, display: "flex", flexDirection: size.isMobile ? "column" : "row", justifyContent: size.isMobile ? "center" : "space-between", alignItems: "center", gap: size.isMobile ? 12 : 0, textAlign: size.isMobile ? "center" : "left", boxSizing: "border-box" }}>
+        <div style={{ fontFamily: F.mono, fontSize: 8, color: C.steel, letterSpacing: "0.1em" }}>© 2026 SANZNOVA. TODOS LOS DERECHOS RESERVADOS.</div>
+        <div style={{ fontFamily: F.mono, fontSize: 8, color: C.steel, letterSpacing: "0.1em" }}>DOCUMENTO CONFIDENCIAL — USO INTERNO</div>
       </div>
     </div>
   );
